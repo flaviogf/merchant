@@ -3,16 +3,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Merchant
 {
-    public class MerchantLogger : ILogger
+    internal class MerchantLogger : ILogger
     {
-        private readonly string _categoryName;
+        private readonly string _name;
 
-        private readonly MerchantLoggerConfiguration _configuration;
+        private readonly IWriter _writer;
 
-        public MerchantLogger(string categoryName, MerchantLoggerConfiguration configuration)
+        public MerchantLogger(string name, IWriter writer)
         {
-            _categoryName = categoryName;
-            _configuration = configuration;
+            _name = name;
+            _writer = writer;
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -22,25 +22,23 @@ namespace Merchant
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            var color = Console.ForegroundColor;
+            if (!IsEnabled(logLevel))
+            {
+                return;
+            }
 
-            var prefix = "|> ";
+            var title = $"Got some rare things on sale, stranger 💥";
 
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"{prefix}Got some rare things on sale, stranger!");
+            var subtitle = $"{Enum.GetName(typeof(LogLevel), logLevel).ToLower()}: {_name}";
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            var value = $"{Enum.GetName(typeof(LogLevel), logLevel).ToLower()}: {_categoryName}";
-            Console.WriteLine(value.PadLeft(value.Length + prefix.Length));
+            var description = formatter.Invoke(state, exception);
 
-            Console.ForegroundColor = color;
-            value = $"{DateTime.UtcNow:O} - {formatter.Invoke(state, exception)}";
-            Console.WriteLine(value.PadLeft(value.Length + prefix.Length));
+            _writer.Write(title, subtitle, description);
         }
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return logLevel >= _configuration.LogLevel;
+            return logLevel == LogLevel.Error;
         }
     }
 }

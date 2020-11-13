@@ -4,20 +4,21 @@ namespace Merchant
 {
     public class MerchantLoggerProvider : ILoggerProvider
     {
-        private readonly MerchantLoggerConfiguration _configuration;
+        private readonly IWriter _writer;
 
         public MerchantLoggerProvider(MerchantLoggerConfiguration configuration)
         {
-            _configuration = configuration;
+            _writer = new DiscordWriter(configuration.BotToken, configuration.ChannelId);
         }
 
-        public ILogger CreateLogger(string categoryName)
+        public ILogger CreateLogger(string name)
         {
-            return new MerchantLogger(categoryName, _configuration);
+            return new MerchantLogger(name, _writer);
         }
 
         public void Dispose()
         {
+            _writer.Dispose();
         }
     }
 }
