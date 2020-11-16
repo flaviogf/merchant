@@ -10,6 +10,8 @@
 
 ## :rocket: Project
 
+<img alt="Nuget" src="https://img.shields.io/nuget/v/Merchant">
+
 :loudspeaker: This project is a logging provider for .NET core and ASP.NET core, which provides one way to be notified on Discord by the Merchant with one of his famous quotes always an error is dispatch using a logger.
 
 ### Preview
