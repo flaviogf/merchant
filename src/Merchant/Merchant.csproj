@@ -6,6 +6,7 @@
     <Version>1.0.3</Version>
     <Authors>flaviogf</Authors>
     <Company>flaviogf</Company>
+    <Description>Simple logging provider for .NET Core and ASP.NET Core</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/flaviogf/merchant</PackageProjectUrl>
     <RepositoryUrl>https://github.com/flaviogf/merchant</RepositoryUrl>
