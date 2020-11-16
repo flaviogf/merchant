@@ -31,7 +31,10 @@ namespace Merchant
 
                     await Execute(title, subtitle, description);
                 }
-                catch { } // ignore
+                catch
+                {
+                    // ignored
+                }
             });
         }
 
@@ -43,25 +46,17 @@ namespace Merchant
 
                 await client.ConnectAsync(uri, CancellationToken.None);
 
-                var body = new
+                var data = new
                 {
                     op = 2,
                     d = new
                     {
                         token = _botToken,
-                        intents = 513,
-                        properties = new
-                        {
-                            os = Environment.OSVersion,
-                            browser = "Merchant",
-                            device = "Merchant"
-                        }
+                        intents = 513
                     }
                 };
 
-                var json = JsonConvert.SerializeObject(body);
-
-                var buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(json));
+                var buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)));
 
                 await client.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
             }
@@ -75,7 +70,7 @@ namespace Merchant
 
                 client.DefaultRequestHeaders.Add("Authorization", $"Bot {_botToken}");
 
-                var body = new
+                var data = new
                 {
                     content = title,
                     tts = false,
@@ -86,18 +81,12 @@ namespace Merchant
                     }
                 };
 
-                var json = JsonConvert.SerializeObject(body);
-
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 
                 var response = await client.PostAsync(uri, content);
 
                 response.EnsureSuccessStatusCode();
             }
-        }
-
-        public void Dispose()
-        {
         }
     }
 }
