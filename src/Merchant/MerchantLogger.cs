@@ -22,11 +22,6 @@ namespace Merchant
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            if (!IsEnabled(logLevel))
-            {
-                return;
-            }
-
             var title = $"Got some rare things on sale, stranger 💥";
 
             var subtitle = $"{Enum.GetName(typeof(LogLevel), logLevel).ToLower()}: {_name}";
