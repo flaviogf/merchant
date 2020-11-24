@@ -89,9 +89,21 @@ namespace Merchant
             return _quotes[index];
         }
 
-        private string GetValueOrNothing(object value)
+        private string GetValueOrNothing(object value, int limit = 1024)
         {
-            return value?.ToString() ?? "Nothing!";
+            var result = value?.ToString();
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return "Nothing";
+            }
+
+            if (result.Length >= limit)
+            {
+                return $"{result.Substring(0, limit - 3)}...";
+            }
+
+            return result;
         }
     }
 }
