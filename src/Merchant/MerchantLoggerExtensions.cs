@@ -25,5 +25,10 @@ namespace Merchant
 
             return builder;
         }
+
+        public static void LogError(this ILogger logger, Exception exception)
+        {
+            logger.LogError(exception: exception, message: string.Empty, args: Array.Empty<object>());
+        }
     }
 }
