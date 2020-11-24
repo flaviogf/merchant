@@ -21,7 +21,7 @@ namespace Merchant
             _channelId = channelId;
         }
 
-        public void Write(string title, string subtitle, string description)
+        public void Write(string title, string description, params object[] args)
         {
             Task.Run(async () =>
             {
@@ -29,7 +29,7 @@ namespace Merchant
                 {
                     await OpenConnection();
 
-                    await Execute(title, subtitle, description);
+                    await Execute(title, description, args);
                 }
                 catch
                 {
@@ -62,7 +62,7 @@ namespace Merchant
             }
         }
 
-        private async Task Execute(string title, string subtitle, string description)
+        private async Task Execute(string title, string description, params object[] args)
         {
             using (var client = new HttpClient())
             {
@@ -72,13 +72,14 @@ namespace Merchant
 
                 var data = new
                 {
-                    content = title,
                     tts = false,
                     embed = new
                     {
-                        title = subtitle,
-                        description = description
-                    }
+                        color = 14500161,
+                        title = title,
+                        description = description,
+                        fields = args
+                    },
                 };
 
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
