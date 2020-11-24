@@ -45,13 +45,36 @@ namespace Merchant
                 return;
             }
 
-            var title = NextQuote();
+            var fields = new object[]
+            {
+                new
+                {
+                    name = "Message:",
+                    value = GetValueOrNothing(exception?.Message)
+                },
+                new
+                {
+                    name = "HelpLink:",
+                    value = GetValueOrNothing(exception?.HelpLink)
+                },
+                new
+                {
+                    name = "Source:",
+                    value = GetValueOrNothing(exception?.Source)
+                },
+                new
+                {
+                    name = "StackTrace:",
+                    value = GetValueOrNothing(exception?.StackTrace)
+                },
+                new
+                {
+                    name = "TargetSite:",
+                    value = GetValueOrNothing(exception?.TargetSite)
+                }
+            };
 
-            var subtitle = $"{Enum.GetName(typeof(LogLevel), logLevel).ToLower()}: {_name}";
-
-            var description = formatter.Invoke(state, exception);
-
-            _writer.Write(title, subtitle, description);
+            _writer.Write(title: NextQuote(), description: _name, args: fields);
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -64,6 +87,11 @@ namespace Merchant
             var index = _random.Next(0, _quotes.Length);
 
             return _quotes[index];
+        }
+
+        private string GetValueOrNothing(object value)
+        {
+            return value?.ToString() ?? "Nothing!";
         }
     }
 }
