@@ -49,6 +49,11 @@ namespace Merchant
             {
                 new
                 {
+                    name = "Friendly Message:",
+                    value = GetValueOrNothing(formatter?.Invoke(state, exception))
+                },
+                new
+                {
                     name = "Message:",
                     value = GetValueOrNothing(exception?.Message)
                 },
