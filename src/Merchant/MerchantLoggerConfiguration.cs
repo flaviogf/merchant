@@ -5,5 +5,9 @@ namespace Merchant
         public string BotToken { get; set; }
 
         public string ChannelId { get; set; }
+
+        public string Application { get; set; }
+
+        public string Version { get; set; }
     }
 }

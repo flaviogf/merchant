@@ -23,13 +23,19 @@ namespace Merchant
             "Ah! I'll buy it at a high price!"
         };
 
-        private readonly string _name;
+        private readonly string _target;
+
+        private readonly string _application;
+
+        private readonly string _version;
 
         private readonly IWriter _writer;
 
-        public MerchantLogger(string name, IWriter writer)
+        public MerchantLogger(string target, string application, string version, IWriter writer)
         {
-            _name = name;
+            _target = target;
+            _application = application;
+            _version = version;
             _writer = writer;
         }
 
@@ -47,6 +53,16 @@ namespace Merchant
 
             var fields = new object[]
             {
+                new
+                {
+                    name = "Application",
+                    value = GetValueOrNothing(_application)
+                },
+                new
+                {
+                    name = "Version",
+                    value = GetValueOrNothing(_version)
+                },
                 new
                 {
                     name = "Friendly Message:",
@@ -79,7 +95,7 @@ namespace Merchant
                 }
             };
 
-            _writer.Write(title: NextQuote(), description: _name, args: fields);
+            _writer.Write(title: NextQuote(), description: _target, args: fields);
         }
 
         public bool IsEnabled(LogLevel logLevel)

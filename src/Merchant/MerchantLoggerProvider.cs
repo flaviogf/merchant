@@ -11,11 +11,11 @@ namespace Merchant
             _configuration = configuration;
         }
 
-        public ILogger CreateLogger(string name)
+        public ILogger CreateLogger(string target)
         {
             var writer = new DiscordWriter(_configuration.BotToken, _configuration.ChannelId);
 
-            return new MerchantLogger(name, writer);
+            return new MerchantLogger(target, _configuration.Application, _configuration.Version, writer);
         }
 
         public void Dispose()
