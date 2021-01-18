@@ -9,5 +9,7 @@ namespace Merchant
         public string Application { get; set; }
 
         public string Version { get; set; }
+
+        public string Environment { get; set; }
     }
 }
