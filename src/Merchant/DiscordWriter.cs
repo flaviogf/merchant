@@ -21,7 +21,7 @@ namespace Merchant
             _channelId = channelId;
         }
 
-        public void Write(string title, string description, params object[] args)
+        public void Write(string title, string description, int color, params object[] args)
         {
             Task.Run(async () =>
             {
@@ -29,7 +29,7 @@ namespace Merchant
                 {
                     await OpenConnection();
 
-                    await Execute(title, description, args);
+                    await Execute(title, description, color, args);
                 }
                 catch
                 {
@@ -62,7 +62,7 @@ namespace Merchant
             }
         }
 
-        private async Task Execute(string title, string description, params object[] args)
+        private async Task Execute(string title, string description, int color, params object[] args)
         {
             using (var client = new HttpClient())
             {
@@ -75,7 +75,7 @@ namespace Merchant
                     tts = false,
                     embed = new
                     {
-                        color = 14500161,
+                        color = color,
                         title = title,
                         description = description,
                         fields = args

@@ -2,6 +2,6 @@ namespace Merchant
 {
     internal interface IWriter
     {
-        void Write(string title, string description, params object[] args);
+        void Write(string title, string description, int color, params object[] args);
     }
 }
