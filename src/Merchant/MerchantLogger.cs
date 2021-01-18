@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 
 namespace Merchant
@@ -23,19 +24,28 @@ namespace Merchant
             "Ah! I'll buy it at a high price!"
         };
 
+        private static readonly IDictionary<LogLevel, int> _colors = new Dictionary<LogLevel, int>
+        {
+            [LogLevel.Warning] = 15844367,
+            [LogLevel.Error] = 14500161
+        };
+
         private readonly string _target;
 
         private readonly string _application;
 
         private readonly string _version;
 
+        private readonly string _environment;
+
         private readonly IWriter _writer;
 
-        public MerchantLogger(string target, string application, string version, IWriter writer)
+        public MerchantLogger(string target, string application, string version, string environment, IWriter writer)
         {
             _target = target;
             _application = application;
             _version = version;
+            _environment = environment;
             _writer = writer;
         }
 
@@ -62,6 +72,11 @@ namespace Merchant
                 {
                     name = "Version",
                     value = GetValueOrNothing(_version)
+                },
+                new
+                {
+                    name = "Environment",
+                    value = GetValueOrNothing(_environment)
                 },
                 new
                 {
@@ -95,12 +110,12 @@ namespace Merchant
                 }
             };
 
-            _writer.Write(title: NextQuote(), description: _target, args: fields);
+            _writer.Write(title: NextQuote(), description: _target, color: _colors[logLevel], args: fields);
         }
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return logLevel == LogLevel.Error;
+            return logLevel >= LogLevel.Warning;
         }
 
         private string NextQuote()

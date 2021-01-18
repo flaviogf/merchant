@@ -15,7 +15,7 @@ namespace Merchant
         {
             var writer = new DiscordWriter(_configuration.BotToken, _configuration.ChannelId);
 
-            return new MerchantLogger(target, _configuration.Application, _configuration.Version, writer);
+            return new MerchantLogger(target, _configuration.Application, _configuration.Version, _configuration.Environment, writer);
         }
 
         public void Dispose()
