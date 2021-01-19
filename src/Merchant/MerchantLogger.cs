@@ -65,17 +65,17 @@ namespace Merchant
             {
                 new
                 {
-                    name = "Application",
+                    name = "Application:",
                     value = GetValueOrNothing(_application)
                 },
                 new
                 {
-                    name = "Version",
+                    name = "Version:",
                     value = GetValueOrNothing(_version)
                 },
                 new
                 {
-                    name = "Environment",
+                    name = "Environment:",
                     value = GetValueOrNothing(_environment)
                 },
                 new
