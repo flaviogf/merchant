@@ -27,7 +27,8 @@ namespace Merchant
         private static readonly IDictionary<LogLevel, int> _colors = new Dictionary<LogLevel, int>
         {
             [LogLevel.Warning] = 15844367,
-            [LogLevel.Error] = 14500161
+            [LogLevel.Error] = 14500161,
+            [LogLevel.Critical] = 16426522
         };
 
         private readonly string _target;
