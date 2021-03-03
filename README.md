@@ -42,7 +42,7 @@ using Microsoft.Extensions.Hosting;
 using Merchant;
 using Microsoft.Extensions.Logging;
 
-namespace temp
+namespace Temp
 {
     public class Program
     {
@@ -61,8 +61,10 @@ namespace temp
 
                     it.AddMerchant((config) =>
                     {
-                        config.BotToken = "YOUR_BOT_TOKEN";
-                        config.ChannelId = "YOUR_CHANNEL_ID";
+                        config.WebhookURL = "[YOUR_WEBHOOK_URL]";
+                        config.Application = "[YOUR_APPLICATION_NAME]";
+                        config.Version = "[YOUR_APPLICATION_VERSION]";
+                        config.Environment = "[YOUR_APPLICATION_EVIRONMENT]";
                     });
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -78,7 +80,7 @@ namespace temp
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace temp
+namespace Temp
 {
     public class SomeService
     {
@@ -97,7 +99,7 @@ namespace temp
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError(ex, string.Empty);
             }
         }
     }
