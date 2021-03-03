@@ -1,8 +1,6 @@
 using System;
 using System.Net.Http;
-using System.Net.WebSockets;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -10,15 +8,11 @@ namespace Merchant
 {
     internal class DiscordWriter : IWriter
     {
-        private readonly string _botToken;
+        private readonly string _webhookURL;
 
-        private readonly string _channelId;
-
-        public DiscordWriter(string botToken, string channelId)
+        public DiscordWriter(string webhookURL)
         {
-            _botToken = botToken;
-
-            _channelId = channelId;
+            _webhookURL = webhookURL;
         }
 
         public void Write(string title, string description, int color, params object[] args)
@@ -27,8 +21,6 @@ namespace Merchant
             {
                 try
                 {
-                    await OpenConnection();
-
                     await Execute(title, description, color, args);
                 }
                 catch
@@ -38,48 +30,27 @@ namespace Merchant
             });
         }
 
-        private async Task OpenConnection()
-        {
-            using (var client = new ClientWebSocket())
-            {
-                var uri = new Uri("wss://gateway.discord.gg/?v=6&encoding=json");
-
-                await client.ConnectAsync(uri, CancellationToken.None);
-
-                var data = new
-                {
-                    op = 2,
-                    d = new
-                    {
-                        token = _botToken,
-                        intents = 513
-                    }
-                };
-
-                var buffer = new ArraySegment<byte>(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)));
-
-                await client.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
-            }
-        }
-
         private async Task Execute(string title, string description, int color, params object[] args)
         {
             using (var client = new HttpClient())
             {
-                var uri = new Uri($"https://discord.com/api/v6/channels/{_channelId}/messages");
-
-                client.DefaultRequestHeaders.Add("Authorization", $"Bot {_botToken}");
+                var uri = new Uri(_webhookURL);
 
                 var data = new
                 {
+                    username = "Merchant",
+                    avatar_url = "https://github.com/flaviogf/merchant/raw/master/assets/icon.png",
                     tts = false,
-                    embed = new
+                    embeds = new object[]
                     {
-                        color = color,
-                        title = title,
-                        description = description,
-                        fields = args
-                    },
+                        new
+                        {
+                            color = color,
+                            title = title,
+                            description = description,
+                            fields = args
+                        }
+                    }
                 };
 
                 var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");

@@ -5,20 +5,32 @@ namespace Merchant
 {
     public static class MerchantLoggerExtensions
     {
+        public static ILoggingBuilder AddMerchant(this ILoggingBuilder builder, MerchantLoggerConfiguration config)
+        {
+            if (config == null)
+            {
+                throw new ArgumentException($"{nameof(config)} must be informed");
+            }
+
+            if (string.IsNullOrEmpty(config.WebhookURL))
+            {
+                throw new ArgumentException($"{nameof(config.WebhookURL)} must be informed");
+            }
+
+            builder.AddProvider(new MerchantLoggerProvider(config));
+
+            return builder;
+        }
+
         public static ILoggingBuilder AddMerchant(this ILoggingBuilder builder, Action<MerchantLoggerConfiguration> action)
         {
             var config = new MerchantLoggerConfiguration();
 
             action(config);
 
-            if (string.IsNullOrEmpty(config.BotToken))
+            if (string.IsNullOrEmpty(config.WebhookURL))
             {
-                throw new ArgumentException($"{nameof(config.BotToken)} must be informed");
-            }
-
-            if (string.IsNullOrEmpty(config.ChannelId))
-            {
-                throw new ArgumentException($"{nameof(config.ChannelId)} must be informed");
+                throw new ArgumentException($"{nameof(config.WebhookURL)} must be informed");
             }
 
             builder.AddProvider(new MerchantLoggerProvider(config));

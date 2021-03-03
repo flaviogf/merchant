@@ -13,7 +13,7 @@ namespace Merchant
 
         public ILogger CreateLogger(string target)
         {
-            var writer = new DiscordWriter(_configuration.BotToken, _configuration.ChannelId);
+            var writer = new DiscordWriter(_configuration.WebhookURL);
 
             return new MerchantLogger(target, _configuration.Application, _configuration.Version, _configuration.Environment, writer);
         }
