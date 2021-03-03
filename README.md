@@ -64,7 +64,7 @@ namespace Temp
                         config.WebhookURL = "[YOUR_WEBHOOK_URL]";
                         config.Application = "[YOUR_APPLICATION_NAME]";
                         config.Version = "[YOUR_APPLICATION_VERSION]";
-                        config.Environment = "[YOUR_APPLICATION_EVIRONMENT]";
+                        config.Environment = "[YOUR_APPLICATION_ENVIRONMENT]";
                     });
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
